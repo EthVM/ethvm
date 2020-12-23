@@ -13,14 +13,15 @@
             -->
             <v-flex grow pa-1>
                 <v-card-title class="title font-weight-bold ml-1 pb-0">{{ chartTitle }}</v-card-title>
-                <v-card-text class="info--text caption ml-1 pt-2 pb-1">{{ description }}</v-card-text>
+                <v-card-text v-if="!showBalanceOptions" class="info--text caption ml-1 pt-2 pb-1">{{ description }}</v-card-text>
+                <v-card-text v-else class="info--text caption ml-1 pt-2 pb-1">{{ chartDescription }}</v-card-text>
             </v-flex>
             <!--
             =====================================================================================
              Time frame buttons
             =====================================================================================
             -->
-            <v-flex v-if="showTimeOptions" grow>
+            <v-flex v-if="showTimeOptions && !showBalanceOptions" grow>
                 <v-layout row wrap align-center justify-end pa-1>
                     <button :class="[toggleData === 0 ? 'active-button' : 'button']" flat small @click="setTimeFrame(0)">
                         {{ $tc('charts.states.hour', 2) }}
@@ -43,6 +44,16 @@
                     <!-- <button :class="[toggleData === 6 ? 'active-button' : 'button']" flat small @click="setTimeFrame(7)">
                         {{ $tc('charts.states.all', 2) }}
                     </button> -->
+                </v-layout>
+            </v-flex>
+            <v-flex v-if="showBalanceOptions" grow>
+                <v-layout row wrap align-center justify-end pa-1>
+                    <button :class="[toggleData === 0 ? 'balance-active-button' : 'balance-button']" flat small @click="setTimeFrame(0)">
+                        By Day
+                    </button>
+                    <button :class="[toggleData === 1 ? 'balance-active-button' : 'balance-button']" flat small @click="setTimeFrame(1)">
+                        By Hour
+                    </button>
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -163,6 +174,8 @@ export default class Chart extends Vue {
     @Prop({ type: Object }) chartOptions!: ChartOptions
     @Prop({ type: Boolean, default: true }) showTimeOptions!: boolean
     @Prop({ type: Boolean, default: false }) isPending!: boolean
+    //Balance
+    @Prop({ type: Boolean, default: false }) showBalanceOptions!: boolean
 
     /*
     ===================================================================================
@@ -248,5 +261,20 @@ export default class Chart extends Vue {
 
 .chart-caption {
     min-height: 3em;
+}
+
+.balance-active-button {
+    background-color: #3965e8;
+    color: white;
+    width: 100px;
+    margin: 10px;
+    border-radius: 2px;
+    padding: 5px;
+}
+.balance-button {
+    color: #8391a8;
+    width: 100px;
+    margin: 10px;
+    padding: 2px;
 }
 </style>

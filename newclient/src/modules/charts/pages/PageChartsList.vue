@@ -7,7 +7,26 @@
              TXS TAB
             =====================================================================================
             -->
-            <v-tab-item slot="tabs-item" value="tab-0">
+            <v-tab-item slot="tabs-item" value="tab-0" class="tabdiv">
+                <v-layout :class="contentClass" row wrap justify-start>
+                    <v-flex xs12 md6>
+                        <v-container class="block-grey">
+                            <v-layout row align-center>
+                                <v-flex xs8 sm7 md8 pb-0 pr-0>
+                                    <v-card-title class="title font-weight-bold pl-0">View Eth2 Balance Change</v-card-title>
+                                    <v-card-text class="info--text pt-0 pl-0 caption">View Eth2 Balance Change By Day, Hour, Minute.</v-card-text>
+                                    <button class="btn-details" @click="rerouteBalance">{{ $t('btn.details') }}</button>
+                                </v-flex>
+                                <v-flex xs4 sm5 md4>
+                                    <v-img :src="require('@/assets/graph-icon.png')" contain height="100"></v-img>
+                                </v-flex>
+                            </v-layout>
+                        </v-container>
+                    </v-flex>
+                </v-layout>
+            </v-tab-item>
+
+            <v-tab-item slot="tabs-item" value="tab-1" class="tabdiv">
                 <v-layout :class="contentClass" row wrap justify-start>
                     <v-flex xs12 md6>
                         <chart-link :chart-id="ChartType.average_txs.link" />
@@ -28,7 +47,7 @@
              PENDING TXS TAB
             =====================================================================================
             -->
-            <v-tab-item slot="tabs-item" value="tab-1">
+            <v-tab-item slot="tabs-item" value="tab-2" class="tabdiv">
                 <v-layout :class="contentClass" row wrap justify-start>
                     <v-flex xs12 md6>
                         <chart-link :chart-id="ChartType.average_new_pending_txs.link" />
@@ -43,7 +62,7 @@
             GAS PRICE TAB
             =====================================================================================
             -->
-            <v-tab-item slot="tabs-item" value="tab-2">
+            <v-tab-item slot="tabs-item" value="tab-3" class="tabdiv">
                 <v-layout :class="contentClass" row wrap justify-start>
                     <v-flex xs12 md6>
                         <chart-link :chart-id="ChartType.average_gas_price.link" />
@@ -101,16 +120,21 @@ export default class PageChartsList extends Vue {
         return [
             {
                 id: 0,
-                title: this.$i18n.tc('tx.name', 2),
+                title: 'Balance',
                 isActive: true
             },
             {
                 id: 1,
-                title: this.$i18n.tc('tx.pending', 2),
+                title: this.$i18n.tc('tx.name', 2),
                 isActive: false
             },
             {
                 id: 2,
+                title: this.$i18n.tc('tx.pending', 2),
+                isActive: false
+            },
+            {
+                id: 3,
                 title: this.$i18n.t('gas.price'),
                 isActive: false
             }
@@ -120,5 +144,24 @@ export default class PageChartsList extends Vue {
     get contentClass(): String {
         return this.$vuetify.breakpoint.name === 'xs' ? 'ma-0' : 'ma-2'
     }
+
+    rerouteBalance(): void {
+        this.$router.push({ path: 'eth2-balance' })
+    }
 }
 </script>
+<style scoped lang="scss">
+.tabdiv {
+    min-height: 490px;
+}
+.block-grey {
+    border: 1px solid #b4bfd2;
+}
+
+.btn-details {
+    border: 1px solid #6270fc;
+    color: #6270fc;
+    border-radius: 2px;
+    padding: 10px 20px;
+}
+</style>
