@@ -350,7 +350,7 @@
         },
         "sec": "sec",
         "sec-ago": "sec ago",
-        "page": "out of",
+        "page": "of",
         "uncle": {
             "no-uncles": "There are no uncles"
         },
@@ -461,6 +461,8 @@
         "less": "Less",
         "first": "First",
         "last": "Last",
+        "next": "Next",
+        "prev": "Previous",
         "back-home": "Go Back Home",
         "report": "Report Issue",
         "details": "View Details",

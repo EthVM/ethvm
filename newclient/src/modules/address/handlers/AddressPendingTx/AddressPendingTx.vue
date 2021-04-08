@@ -2,13 +2,7 @@
     <v-card color="white" flat class="pb-2">
         <app-table-title :has-pagination="showPagination" :title="getTitle" :page-type="pageType" page-link="">
             <template v-if="showPagination" #pagination>
-                <app-paginate
-                    :class="$vuetify.breakpoint.smAndDown ? 'pt-3' : ''"
-                    :total="totalPages"
-                    :current-page="index"
-                    :has-input="false"
-                    @newPage="setPage"
-                />
+                <app-paginate :class="$vuetify.breakpoint.smAndDown ? 'pt-3' : ''" :total="totalPages" :current-page="index" @newPage="setPage" />
             </template>
         </app-table-title>
         <table-txs :is-loading="loading" :table-message="message" :txs-data="pendingTx" :is-scroll-view="false">

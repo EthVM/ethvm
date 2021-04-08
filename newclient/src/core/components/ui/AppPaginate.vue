@@ -2,21 +2,64 @@
     <v-card color="transparent" flat max-width="340">
         <v-container grid-list-xs pa-1>
             <v-layout row align-center justify-end fill-height>
-                <v-btn v-if="hasFirst" flat class="bttnGrey info--text text-capitalize bttn" small @click="setPageOnClick('first')">{{
-                    $t('btn.first')
-                }}</v-btn>
+                <!--
+                =====================================================================================
+                  First Item Button
+                =====================================================================================
+                -->
+                <v-btn :disabled="currentPage === 0" flat class="bttnGrey info--text text-capitalize bttn" small @click="setPageOnClick('first')"
+                    ><v-icon class="secondary--text fas fa-angle-double-left" small />
+                </v-btn>
+                <!--
+                =====================================================================================
+                  Prev Item Button
+                =====================================================================================
+                -->
                 <v-btn :disabled="currentPage === 0" flat class="bttnGrey info--text text-capitalize bttn" small @click="setPageOnClick('prev')"
-                    ><v-icon class="secondary--text" small>fas fa-angle-left</v-icon>
+                    ><v-icon class="secondary--text fas fa-angle-left" small />
                 </v-btn>
-                <div v-if="hasInput" class="page-input">
-                    <v-text-field v-model="pageDisplay" :mask="inputMask" :placeholder="pageDisplay" :error="!isValidPageDisplay" :class="validClass" />
+                <!--
+                =====================================================================================
+                  Input Container
+                =====================================================================================
+                -->
+                <div class="pb-1 page-input">
+                    <v-text-field
+                        v-model="pageDisplay"
+                        :mask="inputMask"
+                        :placeholder="pageDisplay"
+                        :error="!isValidPageDisplay"
+                        :class="[validClass, inputWidthClass, 'centered-input']"
+                    />
                 </div>
-
-                <p class="info--text text-center">{{ showText }}</p>
+                <!--
+                =====================================================================================
+                  Total Pages Text
+                =====================================================================================
+                -->
+                <v-tooltip v-if="hasTotalTooltip" color="white" content-class="tooltip-border" top>
+                    <template #activator="{on}">
+                        <p class="info--text text-center total-p caption pl-1" v-on="on">{{ showText }}</p>
+                    </template>
+                    <span class="black--text">{{ $t('message.page') }} {{ hasTotalTooltip }}</span>
+                </v-tooltip>
+                <p v-else class="info--text text-center total-p caption pl-1">{{ showText }}</p>
+                <!--
+                =====================================================================================
+                  Next Item Button
+                =====================================================================================
+                -->
                 <v-btn :disabled="currentPage === lastPage" flat class="bttnGrey info--text text-capitalize bttn" small @click="setPageOnClick('next')"
-                    ><v-icon class="secondary--text" small>fas fa-angle-right</v-icon>
+                    ><v-icon class="secondary--text fas fa-angle-right" small />
                 </v-btn>
-                <v-btn v-if="hasLast" flat class="bttnGrey info--text text-capitalize bttn" small @click="setPageOnClick('last')">{{ $t('btn.last') }}</v-btn>
+                <!--
+                =====================================================================================
+                  Last Item Button
+                =====================================================================================
+                -->
+                <v-btn :disabled="currentPage === lastPage" flat class="bttnGrey info--text text-capitalize bttn caption" small @click="setPageOnClick('last')"
+                    ><v-icon class="secondary--text fas fa-angle-double-right" small />
+                </v-btn>
             </v-layout>
         </v-container>
     </v-card>
@@ -34,19 +77,14 @@ export default class AppPaginate extends Mixins(NumberFormatMixin) {
     Props
   ===================================================================================
   */
-
     @Prop(Number) total!: number
     @Prop(Number) currentPage!: number
-    @Prop({ type: Boolean, default: true }) hasFirst!: boolean
-    @Prop({ type: Boolean, default: true }) hasLast!: boolean
-    @Prop({ type: Boolean, default: true }) hasInput!: boolean
 
     /*
   ===================================================================================
     Initial Data
   ===================================================================================
   */
-
     validClass = 'center-input body-1 secondary--text'
     invalidClass = 'center-input body-1 error--text'
     isError = false
@@ -103,7 +141,7 @@ export default class AppPaginate extends Mixins(NumberFormatMixin) {
     }
 
     /**
-     * Determine if an given @number is within the valid page range.
+     * Determine if a given @number is within the valid page range.
      *
      * @page {Number} - Page number to be validated
      * @return {Boolean}
@@ -136,13 +174,19 @@ export default class AppPaginate extends Mixins(NumberFormatMixin) {
   */
 
     /**
+     * Returns Text for the total pages near the input
+     *
+     * @returns {string}
+     */
+    get showText(): string {
+        return `${this.$t('message.page')} ${this.formatIntegerValue(new BigNumber(this.total), true).value}`
+    }
+
+    /**
      * Transform the "zero-based" value of this.page into
      * a human-readable string that starts from 1 as opposed to 0
+     * @returns {string}
      */
-
-    get showText(): string {
-        return this.hasInput ? `${this.$t('message.page')} ${this.totalFormatted}` : `${this.pageDisplay} ${this.$t('message.page')} ${this.totalFormatted}`
-    }
     get pageDisplay(): string {
         return new BigNumber(this.currentPage + 1).toFixed()
     }
@@ -156,13 +200,20 @@ export default class AppPaginate extends Mixins(NumberFormatMixin) {
         return !this.isError
     }
 
-    get totalFormatted(): string {
-        return this.formatIntegerValue(new BigNumber(this.total)).value
+    /**
+     * Display tooltip if totalPages >= 1k
+     *
+     * @return {string | undefined} - string IF totalPages >= 1k, undefined otherwise
+     */
+    get hasTotalTooltip(): string | undefined {
+        return this.total >= 1e3 ? this.formatNumber(this.total) : undefined
     }
 
     /**
      * Property this.total is a human-readable number/length as opposed to a zero-based number.
      * The last possible page is zero-based, so this translates the human-readable number into zero-based
+     *
+     * @returns {number}
      */
     get lastPage(): number {
         return this.total - 1
@@ -175,22 +226,54 @@ export default class AppPaginate extends Mixins(NumberFormatMixin) {
         }
         return mask
     }
+
+    /**
+     * Returns Class name of the input width
+     * Determines width of the input accordign to the total page size
+     *
+     * @returns {string}
+     */
+    get inputWidthClass(): string {
+        if (this.total.toString().length < 3) {
+            return 'x-sm'
+        }
+        if (this.total.toString().length < 6) {
+            return 'sm'
+        }
+        if (this.total.toString().length < 9) {
+            return 'md'
+        }
+
+        return 'lg'
+    }
 }
 </script>
 
-<style scoped lang="css">
+<style scoped lang="scss">
 .v-btn {
     height: 30px;
     min-width: 20px;
     margin: 5px;
 }
 
-.page-input {
-    width: 60px;
+.x-sm {
+    max-width: 2em;
+}
+.sm {
+    max-width: 3em;
+}
+.md {
+    max-width: 5em;
+}
+.lg {
+    max-width: 8em;
 }
 
 p {
     margin: 0;
     padding: 0;
+}
+.total-p {
+    white-space: nowrap;
 }
 </style>

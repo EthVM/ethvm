@@ -25,15 +25,7 @@
             </v-flex>
             <v-spacer hidden-md-and-up />
             <v-flex shrink py-0>
-                <app-paginate
-                    v-if="totalPages > 1"
-                    :total="totalPages"
-                    :current-page="index"
-                    :has-input="true"
-                    :has-first="true"
-                    :has-last="true"
-                    @newPage="setPage"
-                />
+                <app-paginate v-if="totalPages > 1" :total="totalPages" :current-page="index" @newPage="setPage" />
             </v-flex>
         </v-layout>
         <!--

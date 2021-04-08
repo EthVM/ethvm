@@ -5,15 +5,7 @@
                 <app-new-update :text="$t('message.update.txs')" :update-count="newMinedTransfers" :hide-count="true" @reload="setPage(0, true)" />
             </template>
             <template v-if="showPagination && !initialLoad" #pagination>
-                <app-paginate
-                    v-if="isBlock"
-                    :total="totalPages"
-                    :current-page="index"
-                    :has-input="isBlock"
-                    :has-first="isBlock"
-                    :has-last="isBlock"
-                    @newPage="setPage"
-                />
+                <app-paginate v-if="isBlock" :total="totalPages" :current-page="index" @newPage="setPage" />
                 <app-paginate-has-more v-else :has-more="hasMore" :current-page="index" :loading="loading" @newPage="setPage" /> </template
         ></app-table-title>
         <table-txs :max-items="maxItems" :index="index" :is-loading="loading" :table-message="message" :txs-data="transactions" :is-scroll-view="isHome" />
@@ -24,15 +16,7 @@
             row
             class="pb-1 pr-3 pl-2"
         >
-            <app-paginate
-                v-if="isBlock"
-                :total="totalPages"
-                :current-page="index"
-                :has-input="isBlock"
-                :has-first="isBlock"
-                :has-last="isBlock"
-                @newPage="setPage"
-            />
+            <app-paginate v-if="isBlock" :total="totalPages" :current-page="index" @newPage="setPage" />
             <app-paginate-has-more v-else :has-more="hasMore" :current-page="index" :loading="loading" @newPage="setPage" />
         </v-layout>
     </v-card>

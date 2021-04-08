@@ -10,7 +10,7 @@
                     <app-filter :is-selected="tokenOptions[1]" :options="tokenOptions" :show-desktop="false" :is-sort="true" @onSelectChange="sortTokens" />
                 </template>
                 <template v-if="showPagination && !loading" #pagination>
-                    <app-paginate :total="totalPages" :current-page="index" :has-input="true" :has-first="true" :has-last="true" @newPage="setPage" />
+                    <app-paginate :total="totalPages" :current-page="index" @newPage="setPage" />
                 </template>
             </app-table-title>
             <table-txs :max-items="maxItems" :index="index" :is-loading="loading" :table-message="message" :txs-data="tokens" :is-scroll-view="false">
@@ -43,7 +43,7 @@
                 row
                 class="pb-1 pr-3 pl-2"
             >
-                <app-paginate :total="totalPages" :current-page="index" :has-input="true" :has-first="true" :has-last="true" @newPage="setPage" />
+                <app-paginate :total="totalPages" :current-page="index" @newPage="setPage" />
             </v-layout>
         </div>
         <table-address-unique-nft

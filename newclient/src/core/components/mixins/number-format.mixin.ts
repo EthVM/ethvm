@@ -18,8 +18,8 @@ export class NumberFormatMixin extends Vue {
     }
     /* Formatted integers (Group II) */
 
-    formatIntegerValue(value: BigNumber): FormattedNumber {
-        return NumberFormatHelper.formatIntegerValue(value)
+    formatIntegerValue(value: BigNumber, isSmaller = false): FormattedNumber {
+        return NumberFormatHelper.formatIntegerValue(value, isSmaller)
     }
 
     /* Token Balances / Quantities (Group III) */

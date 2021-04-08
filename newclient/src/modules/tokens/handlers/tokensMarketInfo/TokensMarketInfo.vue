@@ -9,32 +9,14 @@
             class="pl-2"
         >
             <template #pagination>
-                <app-paginate
-                    v-if="showPagination"
-                    :total="totalPages"
-                    :current-page="index"
-                    :has-input="true"
-                    :has-first="true"
-                    :has-last="true"
-                    class="pb-2"
-                    @newPage="setPage"
-                />
+                <app-paginate v-if="showPagination" :total="totalPages" :current-page="index" class="pb-2" @newPage="setPage" />
             </template>
         </app-table-title>
         <v-layout v-if="!initialLoad" row wrap align-center justify-space-between pl-3 pr-3>
             <v-flex xs12 sm12 hidden-md-and-up>
                 <v-layout :align-end="$vuetify.breakpoint.mdAndUp" :align-center="$vuetify.breakpoint.smAndDown" d-flex column>
                     <app-filter :options="options" :show-desktop="false" :is-selected="options[6]" :is-sort="true" @onSelectChange="sortTokens" />
-                    <app-paginate
-                        v-if="showPagination"
-                        :total="totalPages"
-                        :current-page="index"
-                        :has-input="true"
-                        :has-first="true"
-                        :has-last="true"
-                        class="pb-2"
-                        @newPage="setPage"
-                    />
+                    <app-paginate v-if="showPagination" :total="totalPages" :current-page="index" class="pb-2" @newPage="setPage" />
                 </v-layout>
             </v-flex>
         </v-layout>
@@ -55,7 +37,7 @@
             row
             class="pb-3 pr-4"
         >
-            <app-paginate :total="totalPages" :current-page="index" :has-input="true" :has-first="true" :has-last="true" @newPage="setPage" />
+            <app-paginate :total="totalPages" :current-page="index" @newPage="setPage" />
         </v-layout>
     </v-card>
 </template>

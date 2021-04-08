@@ -5,14 +5,7 @@
                 <notice-new-block @reload="setPage(0, true)" />
             </template>
             <template v-if="showPagination && !initialLoad" #pagination>
-                <app-paginate
-                    :total="totalPages"
-                    :current-page="currentPage"
-                    :has-input="true"
-                    :has-first="true"
-                    :has-last="true"
-                    @newPage="setPage"
-                /> </template
+                <app-paginate :total="totalPages" :current-page="currentPage" @newPage="setPage" /> </template
         ></app-table-title>
         <table-blocks :max-items="maxItems" :index="index" :is-loading="loading" :table-message="message" :block-data="blocks" :is-scroll-view="isHome" />
         <v-layout
@@ -22,7 +15,7 @@
             row
             class="pb-1 pr-3 pl-2"
         >
-            <app-paginate :total="totalPages" :current-page="currentPage" :has-input="true" :has-first="true" :has-last="true" @newPage="setPage" />
+            <app-paginate :total="totalPages" :current-page="currentPage" @newPage="setPage" />
         </v-layout>
     </v-card>
 </template>

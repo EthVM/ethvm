@@ -46,15 +46,7 @@
             </v-flex>
             <v-spacer />
             <v-flex shrink py-0 pl-1>
-                <app-paginate
-                    v-if="totalPages > 1"
-                    :total="totalPages"
-                    :current-page="index"
-                    :has-input="true"
-                    :has-first="true"
-                    :has-last="true"
-                    @newPage="setPage"
-                />
+                <app-paginate v-if="totalPages > 1" :total="totalPages" :current-page="index" @newPage="setPage" />
             </v-flex>
         </v-layout>
 
@@ -98,15 +90,7 @@
                 <fav-search :items="favAddresses" :loading="isLoading" @search="onSearch" />
             </v-flex>
             <v-flex shrink pt-0 pb-0>
-                <app-paginate
-                    v-if="totalPages > 1"
-                    :total="totalPages"
-                    :current-page="index"
-                    :has-input="true"
-                    :has-first="true"
-                    :has-last="true"
-                    @newPage="setPage"
-                />
+                <app-paginate v-if="totalPages > 1" :total="totalPages" :current-page="index" @newPage="setPage" />
             </v-flex>
         </v-layout>
         <!--

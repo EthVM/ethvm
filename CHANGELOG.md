@@ -1,3 +1,13 @@
+### Bug
+
+- Fix pgainate has more bug for the last page [#953](https://github.com/EthVM/EthVM/pull/953)
+
+### Devop
+
+- Refactor Pagination components and update UI [#953](https://github.com/EthVM/EthVM/pull/953)
+
+===================================================================================
+
 ### Release v1.0.6
 
 ### Bug

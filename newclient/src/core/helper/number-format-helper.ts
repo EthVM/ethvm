@@ -9,7 +9,9 @@ export enum FormattedNumberUnit {
     USD = '$',
     B = 'B',
     T = 'T',
-    Q = 'Q'
+    Q = 'Q',
+    M = 'M',
+    K = 'k'
 }
 
 export interface FormattedNumber {
@@ -23,6 +25,7 @@ const SmallUsdBreakpoint = 0.04
 const SmallNumberBreakpoint = 0.0000001
 const SmallGweiBreakpoint = 0.00001
 
+const OneThousand = 1e3
 const TenThousand = 1e4
 const HundredThousand = 1e5
 const OneMillion = 1e6
@@ -44,7 +47,7 @@ export class NumberFormatHelper {
      * @param value: BigNumber
      * @return FormattedNumber
      */
-    public static formatIntegerValue(value: BigNumber): FormattedNumber {
+    public static formatIntegerValue(value: BigNumber, isSmaller = false): FormattedNumber {
         /* Case I: value >= 1,000,000,000,000,000 */
         if (value.isGreaterThanOrEqualTo(OneQuadrillion)) {
             return this.convertToQuadrillion(value)
@@ -59,8 +62,20 @@ export class NumberFormatHelper {
         if (value.isGreaterThanOrEqualTo(OneBillion)) {
             return this.convertToBillions(value)
         }
+        /* Case: need shorter string for over 1 thousand */
+        if (isSmaller) {
+            /* Case IV: value >= 1,000,000 */
+            if (value.isGreaterThanOrEqualTo(OneMillion)) {
+                return this.convertToMillions(value)
+            }
 
-        /* Case IV: value < 1,000,000,000 */
+            /* Case V: value >= 1,000 */
+            if (value.isGreaterThanOrEqualTo(OneThousand)) {
+                return this.convertToThousands(value)
+            }
+        }
+
+        /* Case IV: value < 1,000,000,000 and !isSmaller */
         return { value: value.toFormat() }
     }
 
@@ -434,6 +449,24 @@ export class NumberFormatHelper {
     }
 
     /* Helper functions */
+
+    private static convertToThousands(value: BigNumber): FormattedNumber {
+        const result = value.dividedBy(OneThousand)
+        return {
+            value: `${result.toFormat(Math.min(2, result.decimalPlaces()))}k`,
+            unit: FormattedNumberUnit.K,
+            tooltipText: value.toFormat()
+        }
+    }
+
+    private static convertToMillions(value: BigNumber): FormattedNumber {
+        const result = value.dividedBy(OneMillion)
+        return {
+            value: `${result.toFormat(Math.min(2, result.decimalPlaces()))}M`,
+            unit: FormattedNumberUnit.M,
+            tooltipText: value.toFormat()
+        }
+    }
 
     private static convertToBillions(value: BigNumber): FormattedNumber {
         const result = value.dividedBy(OneBillion)

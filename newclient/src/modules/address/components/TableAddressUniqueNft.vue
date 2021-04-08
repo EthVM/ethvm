@@ -16,15 +16,7 @@
             </v-flex>
             <v-spacer />
             <v-flex shrink>
-                <app-paginate
-                    v-if="showPagination"
-                    :total="totalPages"
-                    :current-page="index"
-                    :has-input="true"
-                    :has-first="true"
-                    :has-last="true"
-                    @newPage="setPage"
-                />
+                <app-paginate v-if="showPagination" :total="totalPages" :current-page="index" @newPage="setPage" />
             </v-flex>
         </v-layout>
         <v-layout v-if="!loading" align-center justify-start row wrap fill-height pr-2 pl-2>
